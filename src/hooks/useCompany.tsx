@@ -120,8 +120,17 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     }
 
     if (created) {
-      const c = created as NonNullable<MemberRow["companies"]>;
-      setCompanies([toCompany(c)]);
+      // A RPC devolve só o id da empresa recém-criada; o restante vem do padrão.
+      setCompanies([
+        toCompany({
+          id: created as unknown as string,
+          name: "Minha Empresa",
+          cnpj: null,
+          org_id: "",
+          regime_tributario: null,
+          cclasstrib_padrao: null,
+        }),
+      ]);
     }
     setLoading(false);
   }, [user]);
