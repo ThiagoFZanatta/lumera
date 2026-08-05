@@ -3863,8 +3863,9 @@ export type Database = {
           error_message: string | null
           event: string | null
           id: string
-          request_payload: Json | null
+          payload: Json | null
           response_body: string | null
+          status: string
           status_code: number | null
           success: boolean
           webhook_id: string
@@ -3876,8 +3877,9 @@ export type Database = {
           error_message?: string | null
           event?: string | null
           id?: string
-          request_payload?: Json | null
+          payload?: Json | null
           response_body?: string | null
+          status?: string
           status_code?: number | null
           success?: boolean
           webhook_id: string
@@ -3889,8 +3891,9 @@ export type Database = {
           error_message?: string | null
           event?: string | null
           id?: string
-          request_payload?: Json | null
+          payload?: Json | null
           response_body?: string | null
+          status?: string
           status_code?: number | null
           success?: boolean
           webhook_id?: string
@@ -3926,7 +3929,7 @@ export type Database = {
           id: string
           last_called_at: string | null
           name: string
-          secret: string
+          secret_token: string
           updated_at: string
           url: string | null
         }
@@ -3943,7 +3946,7 @@ export type Database = {
           id?: string
           last_called_at?: string | null
           name: string
-          secret?: string
+          secret_token?: string
           updated_at?: string
           url?: string | null
         }
@@ -3960,7 +3963,7 @@ export type Database = {
           id?: string
           last_called_at?: string | null
           name?: string
-          secret?: string
+          secret_token?: string
           updated_at?: string
           url?: string | null
         }
@@ -4261,6 +4264,7 @@ export type Database = {
           name: string | null
           primeira_compra: string | null
           proxima_esperada: string | null
+          status: string | null
           tem_contrato: boolean | null
           ticket_medio: number | null
           total_gasto: number | null
