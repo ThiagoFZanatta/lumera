@@ -14,13 +14,182 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      companies: {
+        Row: {
+          cclasstrib_padrao: string | null
+          cnpj: string | null
+          created_at: string
+          id: string
+          name: string
+          onboarding_completed: boolean
+          org_id: string | null
+          plan_key: string
+          regime_tributario: string | null
+          updated_at: string
+        }
+        Insert: {
+          cclasstrib_padrao?: string | null
+          cnpj?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          onboarding_completed?: boolean
+          org_id?: string | null
+          plan_key?: string
+          regime_tributario?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cclasstrib_padrao?: string | null
+          cnpj?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          onboarding_completed?: boolean
+          org_id?: string | null
+          plan_key?: string
+          regime_tributario?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      company_invites: {
+        Row: {
+          company_id: string
+          created_at: string
+          criado_por: string
+          expires_at: string
+          id: string
+          role: string
+          token: string
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          criado_por: string
+          expires_at?: string
+          id?: string
+          role?: string
+          token?: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          criado_por?: string
+          expires_at?: string
+          id?: string
+          role?: string
+          token?: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_invites_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_members: {
+        Row: {
+          approval_limit: number | null
+          company_id: string
+          created_at: string
+          id: string
+          onboarding_completed: boolean
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approval_limit?: number | null
+          company_id: string
+          created_at?: string
+          id?: string
+          onboarding_completed?: boolean
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approval_limit?: number | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          onboarding_completed?: boolean
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_members_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_settings: {
+        Row: {
+          cadastro_aberto: boolean
+          created_at: string
+          functions_url: string | null
+          id: boolean
+          owner_user_id: string | null
+          plataforma_bloqueada: boolean
+          updated_at: string
+        }
+        Insert: {
+          cadastro_aberto?: boolean
+          created_at?: string
+          functions_url?: string | null
+          id?: boolean
+          owner_user_id?: string | null
+          plataforma_bloqueada?: boolean
+          updated_at?: string
+        }
+        Update: {
+          cadastro_aberto?: boolean
+          created_at?: string
+          functions_url?: string | null
+          id?: boolean
+          owner_user_id?: string | null
+          plataforma_bloqueada?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cadastro_esta_aberto: { Args: never; Returns: boolean }
+      consagrar_dono_se_primeiro: { Args: never; Returns: boolean }
+      create_company_for_user: {
+        Args: { company_cnpj?: string; company_name: string }
+        Returns: string
+      }
+      demonstracao_disponivel: { Args: never; Returns: boolean }
+      is_company_admin: { Args: { _company_id: string }; Returns: boolean }
+      is_company_member: { Args: { _company_id: string }; Returns: boolean }
+      limpar_demonstracao_se_remixado: { Args: never; Returns: undefined }
+      plano_da_empresa: { Args: { p_company_id: string }; Returns: Json }
+      plataforma_bloqueada: { Args: never; Returns: boolean }
+      registrar_ambiente: {
+        Args: { p_functions_url: string }
+        Returns: undefined
+      }
+      sou_dono_da_plataforma: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
