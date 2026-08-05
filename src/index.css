@@ -1,0 +1,269 @@
+@font-face {
+  font-family: "Geist";
+  src: url("./assets/via/fonts/Geist-Variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("./assets/via/fonts/Geist-Italic-Variable.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("./assets/via/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("./assets/via/fonts/GeistMono-Italic-Variable.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Ponte semântica FinanceAI ↔ Viver de IA.
+ *
+ * O ERP usa cores Tailwind no formato `hsl(var(--token))`, enquanto o
+ * design system canônico publica `--via-*` como hex/rgba/gradiente. Mantemos
+ * os canais HSL abaixo para preservar modificadores de opacidade (`/10`,
+ * `/40`) e ligamos cada papel visual ao valor equivalente do DS.
+ */
+@layer base {
+  :root {
+    color-scheme: light;
+
+    --background: 220 23.1% 97.5%;
+    --foreground: 214.3 71% 13.5%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 214.3 71% 13.5%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 214.3 71% 13.5%;
+
+    --primary: 214.3 71% 13.5%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 23.1% 97.5%;
+    --secondary-foreground: 214.3 71% 13.5%;
+
+    --muted: 220 20% 95%;
+    --muted-foreground: 218.6 15.1% 36.5%;
+
+    --accent: 214.2 52% 24.5%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 39.3% 54.1%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 153.6 63.3% 33.1%;
+    --success-foreground: 0 0% 100%;
+
+    /* Atenção no DS é navy/accent, nunca amarelo. */
+    --warning: 214.2 52% 24.5%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 214 62% 47.5%;
+    --info-foreground: 0 0% 100%;
+
+    --revenue: 153.6 63.3% 33.1%;
+    --expense: 0 39.3% 54.1%;
+
+    --border: 214.3 26% 88%;
+    --input: 214.3 26% 88%;
+    --ring: 214.3 71% 13.5%;
+    --input-bg: 220 23.1% 97.5%;
+
+    --radius: var(--via-radius-md);
+
+    --chart-1: 214 62% 47.5%;
+    --chart-2: 213.5 76.6% 71.6%;
+    --chart-3: 214.3 71% 13.5%;
+    --chart-4: 153.6 63.3% 33.1%;
+    --chart-5: 0 39.3% 54.1%;
+
+    /* A navegação usa uma superfície invertida também no tema claro. */
+    --sidebar-background: 220 48.8% 8.4%;
+    --sidebar-foreground: 220 37.5% 96.9%;
+    --sidebar-primary: 220 37.5% 96.9%;
+    --sidebar-primary-foreground: 214.3 71% 13.5%;
+    --sidebar-accent: 221.4 43.3% 13.1%;
+    --sidebar-accent-foreground: 220 37.5% 96.9%;
+    --sidebar-border: 215 24% 24%;
+    --sidebar-ring: 213.5 76.6% 71.6%;
+    --sidebar-muted: 215 17.4% 72.9%;
+  }
+
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    --background: 220 48.8% 8.4%;
+    --foreground: 220 37.5% 96.9%;
+
+    --card: 221.4 43.3% 13.1%;
+    --card-foreground: 220 37.5% 96.9%;
+
+    --popover: 220 40% 17.6%;
+    --popover-foreground: 220 37.5% 96.9%;
+
+    --primary: 220 37.5% 96.9%;
+    --primary-foreground: 214.3 71% 13.5%;
+
+    --secondary: 220 40% 17.6%;
+    --secondary-foreground: 216.9 16% 84.1%;
+
+    --muted: 220 40% 17.6%;
+    --muted-foreground: 215 17.4% 72.9%;
+
+    --accent: 213.5 76.6% 71.6%;
+    --accent-foreground: 220 48.8% 8.4%;
+
+    --destructive: 0 45% 62%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 153.6 48% 52%;
+    --success-foreground: 220 48.8% 8.4%;
+
+    --warning: 213.5 76.6% 71.6%;
+    --warning-foreground: 220 48.8% 8.4%;
+
+    --info: 213.5 76.6% 71.6%;
+    --info-foreground: 220 48.8% 8.4%;
+
+    --revenue: 153.6 48% 52%;
+    --expense: 0 52% 70%;
+
+    --border: 215 24% 24%;
+    --input: 215 24% 24%;
+    --ring: 220 37.5% 96.9%;
+    --input-bg: 221.4 43.3% 13.1%;
+
+    --chart-1: 213.5 76.6% 71.6%;
+    --chart-2: 214 62% 47.5%;
+    --chart-3: 220 37.5% 96.9%;
+    --chart-4: 153.6 48% 52%;
+    --chart-5: 0 52% 70%;
+
+    --sidebar-background: 220 48.8% 8.4%;
+    --sidebar-foreground: 216.9 16% 84.1%;
+    --sidebar-primary: 220 37.5% 96.9%;
+    --sidebar-primary-foreground: 214.3 71% 13.5%;
+    --sidebar-accent: 221.4 43.3% 13.1%;
+    --sidebar-accent-foreground: 220 37.5% 96.9%;
+    --sidebar-border: 215 24% 24%;
+    --sidebar-ring: 220 37.5% 96.9%;
+    --sidebar-muted: 215 17.4% 72.9%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    min-width: 320px;
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply min-h-screen bg-background font-ui text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-variant-numeric: proportional-nums;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  ::selection {
+    color: var(--via-text-primary);
+    background: var(--via-navy-14);
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .font-ui {
+    font-family: var(--via-font);
+  }
+
+  .font-display {
+    font-family: var(--via-font-display);
+  }
+
+  .font-mono {
+    font-family: var(--via-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .shadow-card {
+    box-shadow: var(--via-shadow-sm);
+  }
+
+  .shadow-card-hover {
+    box-shadow: var(--via-shadow-md);
+  }
+
+  .shadow-dropdown {
+    box-shadow: var(--via-shadow-lg);
+  }
+
+  .shadow-modal {
+    box-shadow: var(--via-shadow-xl);
+  }
+
+  .ease-via-snap {
+    transition-timing-function: var(--via-ease-snap);
+  }
+
+  .ease-via-spring {
+    transition-timing-function: var(--via-ease-spring);
+  }
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-count-up {
+  animation: countUp 560ms var(--via-ease-out) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,21 +1,34 @@
-# Plano: Página inicial em branco
+## Adicionar aviso de uso consciente na tela de login
 
-## Objetivo
-Substituir a página placeholder padrão do Lovable em `/` por uma tela inicial limpa e em branco, mantendo toda a estrutura do template intacta.
+### Arquivo alterado
 
-## Alterações
-1. **src/routes/index.tsx**
-   - Remover o `<img>` placeholder (`data-lovable-blank-page-placeholder`).
-   - Renderizar um container vazio que ocupe a tela (`min-h-screen`) sem conteúdo centralizado.
-   - Manter a rota `/` funcional.
+**`src/components/auth/LoginSignupForm.tsx`**
 
-2. **Metadados (opcional, se necessário)**
-   - Atualizar o `head()` da rota `/` para título e descrição genéricos de "Projeto em branco", caso o placeholder exija metadados próprios.
+1. Importar `AlertTriangle` de `lucide-react`.
+2. Adicionar bloco `<div className="lsf-disclaimer">` dentro do `.lsf-wrapper`, logo após o `.lsf-container`.
+3. Adicionar CSS escopado no `<style>` existente (mesmo padrão do resto do componente — Poppins, cores hardcoded, fora do design system).
 
-## Fora do escopo
-- Nenhuma alteração em `src/routes/__root.tsx`, `src/styles.css`, `src/router.tsx` ou outros arquivos do template.
-- Nenhuma funcionalidade, rota, componente ou backend será adicionado.
+### Conteúdo do aviso (PT-BR)
 
-## Validação
-- Build do projeto deve passar sem erros.
-- Acessar `/` deve exibir uma tela em branco, sem o logo/ilustração placeholder.
+Título: **Uso consciente e responsabilidade**
+
+Texto:
+> Esta plataforma processa dados financeiros sensíveis. Recomendamos fortemente o acompanhamento por **auditorias de segurança regulares** e a adoção de boas práticas de proteção de credenciais e acessos.
+>
+> A **Viver de IA** não se responsabiliza por eventuais falhas, perdas ou incidentes ocorridos em produção. A manutenção, o monitoramento e o nível de qualidade de segurança da plataforma são de **responsabilidade exclusiva do cliente**.
+
+### Estilo
+
+- `max-width: 850px`, alinhado ao container
+- Fundo `rgba(255,255,255,.75)` com `backdrop-filter: blur(8px)`
+- Borda esquerda `4px solid #f59e0b` (âmbar, sinaliza aviso)
+- `border-radius: 12px`, padding `16px 20px`, `margin-top: 20px`
+- Layout flex: ícone âmbar à esquerda + coluna título/corpo
+- Texto `13px`, cor `#444`, título `600` em `#1f2937`
+- Responsivo: em ≤650px reduz padding e largura segue o wrapper
+
+### Fora de escopo
+
+- Sem checkbox "Li e aceito".
+- Sem alterações em `Auth.tsx`, rotas ou lógica de auth.
+- Sem nova rota de Termos/Política (posso adicionar depois se quiser).

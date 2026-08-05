@@ -1,24 +1,34 @@
-# Lumera
+# FinanceAI — ERP financeiro com agentes de IA
 
-CRIE_UM_PROJETO_EM_BRANCO
+**O ERP financeiro para PMEs multi-CNPJ em que os agentes de IA trabalham por você — e que já está pronto para a Reforma Tributária.**
 
-This project was built with [Lovable](https://lovable.dev).
+## O que ele faz
 
-## Build with Lovable
+- **Financeiro completo**: lançamentos, plano de contas, centros de custo, DRE, fluxo de caixa, conciliação bancária (Banco Inter), cobrança (Asaas), contas a pagar com workflow de aprovação por alçada.
+- **Multi-CNPJ de verdade** (até 6 por cliente): BI de margem consolidado × individual, plano de contas do grupo, eliminação intercompany, orçamento×realizado por empresa.
+- **Agentes de IA com humano no loop**:
+  - *Cobrança* — varre cobranças vencidas/a vencer e rascunha a mensagem; você aprova.
+  - *Fechamento* — checklist do mês (classificação, pendências, vencidas) e close assistido.
+  - *Alertas* — anomalias de valor (lançamento fora da curva histórica).
+  - Aprovação direto no **grupo do WhatsApp**: `ações`, `aprovar 1`, `recusar 2`.
+- **Fiscal pronto para 2026**: destaque CBS/IBS (LC 214/2025, NT 2025.002) em NFe/NFCe via PlugNotas, emissão **NFS-e Nacional própria** (API SEFIN, obrigatória p/ Simples a partir de 01/09/2026), OCR de documentos por IA.
+- **Plataforma**: API pública read-only por chave (`docs/PUBLIC-API.md`), export CSV/PDF, PWA instalável.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/12048dc3-5784-4d18-bb43-bb1e35ee8bcb).
+## Stack
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Vite + React + TypeScript + shadcn/ui · Supabase (Postgres/RLS + 27 edge functions Deno) · Lovable AI Gateway (Gemini) · Evolution API (WhatsApp) · PlugNotas + SEFIN Nacional (fiscal) · Railway (`nfse-worker`, mTLS A1).
 
-## Development
+Decisões de arquitetura fiscal: `docs/ARCHITECTURE-FISCAL.md`. Plano de evolução: `.claude/plans/pivo-state-of-the-art.plan.md`.
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Desenvolvimento
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```bash
+npm install
+npm run dev        # local (aponta para o Supabase do projeto via .env)
+npm test           # vitest (libs puras: margin, plugnotas, reforma, csv)
+npm run build      # produção
 ```
+
+- Migrations em `supabase/migrations` (sempre aditivas — projeto em produção).
+- Edge functions em `supabase/functions` — toda função nova valida auth via `_shared/auth.ts`.
+- Deploy: gitsync com o Lovable (push na `main` → aplicar no chat do Lovable).
