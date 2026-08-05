@@ -589,6 +589,586 @@ export type Database = {
         }
         Relationships: []
       }
+      company_asaas_anticipations: {
+        Row: {
+          anticipated_value: number | null
+          anticipation_date: string | null
+          asaas_id: string
+          company_id: string
+          created_at: string
+          credit_date: string | null
+          debit_date: string | null
+          denial_reason: string | null
+          due_date: string | null
+          fee: number | null
+          id: string
+          installment_count: number | null
+          net_value: number | null
+          payment_id: string | null
+          raw_payload: Json | null
+          status: string
+          total_value: number | null
+          updated_at: string
+        }
+        Insert: {
+          anticipated_value?: number | null
+          anticipation_date?: string | null
+          asaas_id: string
+          company_id: string
+          created_at?: string
+          credit_date?: string | null
+          debit_date?: string | null
+          denial_reason?: string | null
+          due_date?: string | null
+          fee?: number | null
+          id?: string
+          installment_count?: number | null
+          net_value?: number | null
+          payment_id?: string | null
+          raw_payload?: Json | null
+          status: string
+          total_value?: number | null
+          updated_at?: string
+        }
+        Update: {
+          anticipated_value?: number | null
+          anticipation_date?: string | null
+          asaas_id?: string
+          company_id?: string
+          created_at?: string
+          credit_date?: string | null
+          debit_date?: string | null
+          denial_reason?: string | null
+          due_date?: string | null
+          fee?: number | null
+          id?: string
+          installment_count?: number | null
+          net_value?: number | null
+          payment_id?: string | null
+          raw_payload?: Json | null
+          status?: string
+          total_value?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_asaas_anticipations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_asaas_bills: {
+        Row: {
+          asaas_id: string
+          can_be_cancelled: boolean | null
+          company_id: string
+          company_name: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          failure_reason: string | null
+          fee: number | null
+          id: string
+          identification_field: string | null
+          payment_date: string | null
+          raw_payload: Json | null
+          schedule_date: string | null
+          status: string
+          type: string | null
+          updated_at: string
+          value: number | null
+        }
+        Insert: {
+          asaas_id: string
+          can_be_cancelled?: boolean | null
+          company_id: string
+          company_name?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          failure_reason?: string | null
+          fee?: number | null
+          id?: string
+          identification_field?: string | null
+          payment_date?: string | null
+          raw_payload?: Json | null
+          schedule_date?: string | null
+          status: string
+          type?: string | null
+          updated_at?: string
+          value?: number | null
+        }
+        Update: {
+          asaas_id?: string
+          can_be_cancelled?: boolean | null
+          company_id?: string
+          company_name?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          failure_reason?: string | null
+          fee?: number | null
+          id?: string
+          identification_field?: string | null
+          payment_date?: string | null
+          raw_payload?: Json | null
+          schedule_date?: string | null
+          status?: string
+          type?: string | null
+          updated_at?: string
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_asaas_bills_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_asaas_config: {
+        Row: {
+          active: boolean
+          api_key_production: string | null
+          api_key_sandbox: string | null
+          company_id: string
+          created_at: string
+          enabled_events: string[]
+          environment: string
+          id: string
+          notification_email: string | null
+          updated_at: string
+          webhook_auth_token: string | null
+          webhook_email: string | null
+          webhook_id: string | null
+          webhook_send_type: string | null
+          webhook_status: string
+          webhook_url: string | null
+        }
+        Insert: {
+          active?: boolean
+          api_key_production?: string | null
+          api_key_sandbox?: string | null
+          company_id: string
+          created_at?: string
+          enabled_events?: string[]
+          environment?: string
+          id?: string
+          notification_email?: string | null
+          updated_at?: string
+          webhook_auth_token?: string | null
+          webhook_email?: string | null
+          webhook_id?: string | null
+          webhook_send_type?: string | null
+          webhook_status?: string
+          webhook_url?: string | null
+        }
+        Update: {
+          active?: boolean
+          api_key_production?: string | null
+          api_key_sandbox?: string | null
+          company_id?: string
+          created_at?: string
+          enabled_events?: string[]
+          environment?: string
+          id?: string
+          notification_email?: string | null
+          updated_at?: string
+          webhook_auth_token?: string | null
+          webhook_email?: string | null
+          webhook_id?: string | null
+          webhook_send_type?: string | null
+          webhook_status?: string
+          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_asaas_config_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_asaas_invoices: {
+        Row: {
+          asaas_id: string
+          company_id: string
+          created_at: string
+          customer_id: string | null
+          effective_date: string | null
+          error_message: string | null
+          id: string
+          net_value: number | null
+          number: string | null
+          observations: string | null
+          payment_id: string | null
+          pdf_url: string | null
+          service_description: string | null
+          status: string
+          taxes: Json | null
+          updated_at: string
+          value: number | null
+          xml_url: string | null
+        }
+        Insert: {
+          asaas_id: string
+          company_id: string
+          created_at?: string
+          customer_id?: string | null
+          effective_date?: string | null
+          error_message?: string | null
+          id?: string
+          net_value?: number | null
+          number?: string | null
+          observations?: string | null
+          payment_id?: string | null
+          pdf_url?: string | null
+          service_description?: string | null
+          status: string
+          taxes?: Json | null
+          updated_at?: string
+          value?: number | null
+          xml_url?: string | null
+        }
+        Update: {
+          asaas_id?: string
+          company_id?: string
+          created_at?: string
+          customer_id?: string | null
+          effective_date?: string | null
+          error_message?: string | null
+          id?: string
+          net_value?: number | null
+          number?: string | null
+          observations?: string | null
+          payment_id?: string | null
+          pdf_url?: string | null
+          service_description?: string | null
+          status?: string
+          taxes?: Json | null
+          updated_at?: string
+          value?: number | null
+          xml_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_asaas_invoices_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_asaas_payments: {
+        Row: {
+          asaas_id: string
+          bank_slip_url: string | null
+          billing_type: string | null
+          chargeback: Json | null
+          company_id: string
+          confirmed_date: string | null
+          created_at: string
+          credit_card: Json | null
+          credit_date: string | null
+          customer_id: string | null
+          description: string | null
+          discount: Json | null
+          due_date: string | null
+          external_reference: string | null
+          fine: Json | null
+          id: string
+          installment_id: string | null
+          interest: Json | null
+          invoice_url: string | null
+          net_value: number | null
+          payment_date: string | null
+          payment_link: string | null
+          pix_transaction: Json | null
+          raw_payload: Json | null
+          refunds: Json | null
+          split: Json | null
+          status: string
+          subscription_id: string | null
+          updated_at: string
+          value: number | null
+        }
+        Insert: {
+          asaas_id: string
+          bank_slip_url?: string | null
+          billing_type?: string | null
+          chargeback?: Json | null
+          company_id: string
+          confirmed_date?: string | null
+          created_at?: string
+          credit_card?: Json | null
+          credit_date?: string | null
+          customer_id?: string | null
+          description?: string | null
+          discount?: Json | null
+          due_date?: string | null
+          external_reference?: string | null
+          fine?: Json | null
+          id?: string
+          installment_id?: string | null
+          interest?: Json | null
+          invoice_url?: string | null
+          net_value?: number | null
+          payment_date?: string | null
+          payment_link?: string | null
+          pix_transaction?: Json | null
+          raw_payload?: Json | null
+          refunds?: Json | null
+          split?: Json | null
+          status: string
+          subscription_id?: string | null
+          updated_at?: string
+          value?: number | null
+        }
+        Update: {
+          asaas_id?: string
+          bank_slip_url?: string | null
+          billing_type?: string | null
+          chargeback?: Json | null
+          company_id?: string
+          confirmed_date?: string | null
+          created_at?: string
+          credit_card?: Json | null
+          credit_date?: string | null
+          customer_id?: string | null
+          description?: string | null
+          discount?: Json | null
+          due_date?: string | null
+          external_reference?: string | null
+          fine?: Json | null
+          id?: string
+          installment_id?: string | null
+          interest?: Json | null
+          invoice_url?: string | null
+          net_value?: number | null
+          payment_date?: string | null
+          payment_link?: string | null
+          pix_transaction?: Json | null
+          raw_payload?: Json | null
+          refunds?: Json | null
+          split?: Json | null
+          status?: string
+          subscription_id?: string | null
+          updated_at?: string
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_asaas_payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_asaas_subscriptions: {
+        Row: {
+          asaas_id: string
+          billing_type: string | null
+          company_id: string
+          created_at: string
+          customer_id: string | null
+          cycle: string | null
+          description: string | null
+          end_date: string | null
+          external_reference: string | null
+          id: string
+          max_payments: number | null
+          next_due_date: string | null
+          payment_count: number | null
+          raw_payload: Json | null
+          status: string
+          updated_at: string
+          value: number | null
+        }
+        Insert: {
+          asaas_id: string
+          billing_type?: string | null
+          company_id: string
+          created_at?: string
+          customer_id?: string | null
+          cycle?: string | null
+          description?: string | null
+          end_date?: string | null
+          external_reference?: string | null
+          id?: string
+          max_payments?: number | null
+          next_due_date?: string | null
+          payment_count?: number | null
+          raw_payload?: Json | null
+          status: string
+          updated_at?: string
+          value?: number | null
+        }
+        Update: {
+          asaas_id?: string
+          billing_type?: string | null
+          company_id?: string
+          created_at?: string
+          customer_id?: string | null
+          cycle?: string | null
+          description?: string | null
+          end_date?: string | null
+          external_reference?: string | null
+          id?: string
+          max_payments?: number | null
+          next_due_date?: string | null
+          payment_count?: number | null
+          raw_payload?: Json | null
+          status?: string
+          updated_at?: string
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_asaas_subscriptions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_asaas_transfers: {
+        Row: {
+          asaas_id: string
+          authorized: boolean | null
+          bank_account: Json | null
+          company_id: string
+          created_at: string
+          description: string | null
+          external_reference: string | null
+          fee: number | null
+          id: string
+          net_value: number | null
+          operation_type: string | null
+          raw_payload: Json | null
+          scheduled_date: string | null
+          status: string
+          transaction_receipt_url: string | null
+          transfer_fee: number | null
+          type: string | null
+          updated_at: string
+          value: number | null
+        }
+        Insert: {
+          asaas_id: string
+          authorized?: boolean | null
+          bank_account?: Json | null
+          company_id: string
+          created_at?: string
+          description?: string | null
+          external_reference?: string | null
+          fee?: number | null
+          id?: string
+          net_value?: number | null
+          operation_type?: string | null
+          raw_payload?: Json | null
+          scheduled_date?: string | null
+          status: string
+          transaction_receipt_url?: string | null
+          transfer_fee?: number | null
+          type?: string | null
+          updated_at?: string
+          value?: number | null
+        }
+        Update: {
+          asaas_id?: string
+          authorized?: boolean | null
+          bank_account?: Json | null
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          external_reference?: string | null
+          fee?: number | null
+          id?: string
+          net_value?: number | null
+          operation_type?: string | null
+          raw_payload?: Json | null
+          scheduled_date?: string | null
+          status?: string
+          transaction_receipt_url?: string | null
+          transfer_fee?: number | null
+          type?: string | null
+          updated_at?: string
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_asaas_transfers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_asaas_webhook_events: {
+        Row: {
+          company_id: string
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          error_message: string | null
+          event_category: string | null
+          event_id: string
+          event_type: string
+          id: string
+          payload: Json
+          processed: boolean
+          processed_at: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          error_message?: string | null
+          event_category?: string | null
+          event_id: string
+          event_type: string
+          id?: string
+          payload?: Json
+          processed?: boolean
+          processed_at?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          error_message?: string | null
+          event_category?: string | null
+          event_id?: string
+          event_type?: string
+          id?: string
+          payload?: Json
+          processed?: boolean
+          processed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_asaas_webhook_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company_invites: {
         Row: {
           company_id: string
