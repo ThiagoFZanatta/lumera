@@ -1,64 +1,65 @@
-# Auditoria de segurança e plano de blindagem
+# Levantamento: o que o projeto espera do banco de dados
 
-Fiz uma varredura completa: banco de dados, todas as 41 funções do backend, o código do site, chaves/segredos, webhooks e dependências. Abaixo, o que encontrei em linguagem simples e o que proponho corrigir, em ordem de urgência.
+O código do aplicativo está inteiro e preservado (41 funções de servidor, telas, regras de negócio). O que está vazio é o banco de dados. Abaixo está o inventário completo de tudo que o código procura no banco e hoje não encontra.
 
-## O que está bem
+## Resumo em números
 
-- Nenhuma senha ou chave secreta está escrita dentro do código.
-- A chave "mestra" do banco (service_role) só é usada no servidor, nunca no navegador.
-- A maioria das funções do backend confere quem é o usuário e se ele pertence à empresa antes de responder.
-- O verificador automático de vulnerabilidades em bibliotecas não apontou problemas hoje.
+- 74 tabelas de dados
+- 10 relatórios calculados (views)
+- 26 rotinas automáticas de banco (funções/RPCs)
+- 1 área de arquivos (bucket "documents")
+- 41 funções de servidor (essas existem e continuam intactas)
+- 0 registros de estrutura salvos (não há histórico de migrações)
 
-## Problemas encontrados
+## 1. Tabelas que o código utiliza
 
-### 1. O banco de dados está completamente vazio (crítico)
-Não existe nenhuma tabela no banco hoje, e não existe nenhum arquivo de histórico das mudanças do banco no projeto. Na prática: o "cofre" onde ficam empresas, lançamentos, notas e usuários não existe mais, e as regras de quem pode ver o quê (RLS) sumiram junto. As telas do sistema já estão dando erro por causa disso.
+**Núcleo financeiro (mais usados)**
+transactions, receivables, bills_payable, chart_of_accounts, cost_centers, bank_accounts, bank_transactions_raw, invoices, contracts, contacts, products, budgets, monthly_close, kpi_metas, reconciliation_log, company_journal_entries, owner_transactions
 
-Risco de segurança: se o banco for recriado às pressas, é muito fácil recriá-lo sem as regras de acesso, deixando dados de uma empresa visíveis para clientes de outra.
+**Empresas e acesso**
+companies, company_members, company_invites, api_keys, notifications, documents, webhooks, webhook_logs
 
-### 2. Qualquer site da internet pode chamar o backend
-Todas as funções aceitam chamadas vindas de qualquer endereço na internet (configuração "aberta"). Isso facilita que uma página maliciosa use o navegador de um usuário logado para disparar ações no sistema.
+**Fiscal e notas**
+plugnotas_config, plugnotas_documents, nfse_config, focus_config, fiscal_files, tax_guides, tax_rates, municipalities, cclasstrib_codigos, indices_economicos
 
-### 3. Webhook do WhatsApp aceita qualquer um
-O endereço que recebe mensagens do WhatsApp não confere nenhuma senha ou assinatura: qualquer pessoa que descubra o endereço pode injetar mensagens falsas e gravar dados no sistema. Outros webhooks (Asaas, genérico) usam senha simples; o do Stripe já valida assinatura corretamente.
+**Vendas, compras e estoque**
+sales_orders, sales_order_items, purchase_orders, purchase_order_items, stock_movements, warehouses
 
-### 4. Sem limite de tentativas
-Nem a API pública (chave `cfk_...`) nem o login têm limite de tentativas. Um atacante pode testar chaves e senhas indefinidamente sem ser barrado.
+**Integrações bancárias e pagamentos**
+inter_config, openfinance_config, bank_connections, stripe_config, stripe_charges, stripe_payouts, stripe_events, company_asaas_config, company_asaas_payments, company_asaas_bills, company_asaas_invoices, company_asaas_subscriptions, company_asaas_transfers, company_asaas_anticipations, company_asaas_webhook_events, contaazul_config
 
-### 5. Comparação de chaves e tokens de forma insegura
-As chaves de API e tokens de webhook são comparados de forma que, em teoria, permite descobrir o valor por tentativa e medição de tempo. Também são guardados com um método de embaralhamento simples demais.
+**WhatsApp e IA**
+whatsapp_configs, whatsapp_messages, agent_actions, agent_rules, agent_instances, classification_rules, ai_usage
 
-### 6. Sem monitoramento nem plano de incidente
-Não há registro de acessos suspeitos, alerta de tentativa de invasão, nem procedimento definido para o caso de vazamento.
+## 2. Relatórios calculados (views)
 
-## Plano de correção (4 fases)
+v_company_margin, v_company_margin_full, v_dre_linhas, v_centro_custo_mes, v_cliente_360, v_recompra_clientes, v_group_account_totals, v_group_ap_ar, v_mrr_movimentos, v_stripe_repasses
 
-### Fase 1 — Reconstruir o cofre com tranca (o mais urgente)
-- Recriar todas as tabelas do sistema a partir do código existente, já nascendo com as regras de acesso ativadas.
-- Cada tabela só permite que o usuário veja dados das empresas às quais ele pertence.
-- Papéis (administrador, usuário, somente leitura) em tabela separada, para impedir que alguém se promova a administrador.
-- Gerar arquivos de histórico do banco, para que nada mais se perca e tudo fique auditável.
-- Rodar o verificador oficial do banco ao final e corrigir o que ele apontar.
+## 3. Rotinas automáticas do banco (o "cérebro" das automações)
 
-### Fase 2 — Fechar as portas do backend
-- Restringir as chamadas apenas aos endereços oficiais do sistema (site publicado e prévia), em vez de "qualquer site".
-- Exigir uma senha/assinatura no webhook do WhatsApp e reforçar os demais.
-- Trocar as comparações de chave e token por comparação segura, e reforçar o embaralhamento das chaves de API.
+- **Empresa/plano/bloqueio**: create_company_for_user, plano_da_empresa, plataforma_bloqueada
+- **Contratos e propostas**: gerar_link_proposta, ver_proposta, aceitar_proposta, reajustar_contrato, encerrar_recorrencia, gerar_conta_recorrente
+- **Fechamento contábil**: fechar_mes, reabrir_mes, ratear_lancamento, fechar_comissao
+- **Vendas/estoque/crédito**: faturar_pedido, registrar_movimento_estoque, checar_credito, reserve_next_dps_number
+- **Credenciais protegidas (guardadas com criptografia)**: set/get_focus_token, set/get_stripe_credentials, set/get_pluggy_credentials, set/get_contaazul_credentials, rotate_contaazul_refresh_token, resolver_canal_stripe_unico
 
-### Fase 3 — Barreiras contra ataque em massa
-- Limite de tentativas por minuto na API pública e nas funções sensíveis, com bloqueio temporário.
-- Validação rigorosa do que entra em cada função (tamanho, formato, tipo), evitando dados maliciosos.
-- Revisão final função por função para garantir que nenhuma esqueceu de conferir a empresa do usuário.
+## 4. O que é risco real de perda
 
-### Fase 4 — Vigilância contínua
-- Registro de tentativas negadas e alerta quando houver muitas em pouco tempo.
-- Rotina de rotação de chaves e de atualização de bibliotecas.
-- Documento curto de "o que fazer em caso de suspeita de invasão", em linguagem simples.
+- **Preservado**: todas as telas, todas as 41 funções de servidor, e a lista acima de nomes, campos e chamadas — dá para reconstruir a estrutura a partir do código.
+- **Não recuperável**: os dados que existiam dentro das tabelas (lançamentos, clientes, notas). Se havia dados, eles já não estão lá.
+- **Parcialmente recuperável**: o conteúdo interno exato das 26 rotinas automáticas e de eventuais gatilhos que existiam só dentro do banco. O código mostra o nome, os parâmetros e o resultado esperado de cada uma, mas não o texto original. Elas precisam ser reescritas seguindo o comportamento que o aplicativo espera.
 
-## Detalhes técnicos
+## 5. Próximo passo sugerido
 
-- Banco: `information_schema` retorna 0 tabelas em `public`; `supabase/migrations/` está vazio; linter e scanners não acusam nada porque não há schema. As chamadas RPC `plataforma_bloqueada`, `cadastro_esta_aberto`, `demonstracao_disponivel` e `limpar_demonstracao_se_remixado` retornam PGRST202.
-- CORS: `supabase/functions/_shared/cors.ts` usa `Access-Control-Allow-Origin: *` para todas as funções. Trocar por allowlist de origens.
-- Webhooks: `whatsapp-webhook` não valida nada; `company-asaas-webhook` e `webhook-receiver` comparam token com `!==` (usar comparação de tempo constante); `stripe-webhook` já valida HMAC.
-- `public-api`: hash `sha256` sem salt em `api_keys.key_hash`, sem rate limit, `limit` máximo 500 — adicionar throttling por chave e comparação constante.
-- Reconstrução do schema: derivar de `src/integrations/supabase/types.ts`, das queries das edge functions e dos seeds em `supabase/seed*.sql`; cada `CREATE TABLE` acompanhado de `GRANT` + `ENABLE ROW LEVEL SECURITY` + políticas baseadas em `company_members`.
+Reconstruir o banco em blocos, do mais essencial ao mais periférico, cada bloco já nascendo com as regras de segurança (quem pode ver e alterar cada dado) aplicadas:
+
+1. Empresas, membros e permissões (base de tudo)
+2. Plano de contas, centros de custo, contatos, contas bancárias
+3. Lançamentos, contas a receber e a pagar
+4. Contratos, vendas, compras e estoque
+5. Fiscal e notas
+6. Integrações (bancos, Stripe, Asaas, WhatsApp) com credenciais criptografadas
+7. Relatórios calculados e rotinas automáticas
+8. Correções de segurança do plano anterior (CORS, webhooks assinados, limite de requisições)
+
+Cada bloco é revisado por você antes de ser aplicado, e nenhum código do aplicativo é apagado no processo.
