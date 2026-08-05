@@ -14,6 +14,119 @@ export type Database = {
   }
   public: {
     Tables: {
+      bank_accounts: {
+        Row: {
+          account_number: string | null
+          account_type: string
+          active: boolean
+          agency: string | null
+          balance: number
+          bank_code: string | null
+          bank_name: string | null
+          company_id: string
+          created_at: string
+          id: string
+          last_synced_at: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          account_number?: string | null
+          account_type?: string
+          active?: boolean
+          agency?: string | null
+          balance?: number
+          bank_code?: string | null
+          bank_name?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          account_number?: string | null
+          account_type?: string
+          active?: boolean
+          agency?: string | null
+          balance?: number
+          bank_code?: string | null
+          bank_name?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_accounts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chart_of_accounts: {
+        Row: {
+          active: boolean
+          code: string
+          company_id: string
+          created_at: string
+          group_code: string | null
+          group_name: string | null
+          id: string
+          name: string
+          parent_id: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          company_id: string
+          created_at?: string
+          group_code?: string | null
+          group_name?: string | null
+          id?: string
+          name: string
+          parent_id?: string | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          company_id?: string
+          created_at?: string
+          group_code?: string | null
+          group_name?: string | null
+          id?: string
+          name?: string
+          parent_id?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chart_of_accounts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chart_of_accounts_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           cclasstrib_padrao: string | null
@@ -138,6 +251,136 @@ export type Database = {
           },
         ]
       }
+      contacts: {
+        Row: {
+          active: boolean
+          city: string | null
+          company_id: string
+          complement: string | null
+          created_at: string
+          credit_limit: number | null
+          default_payment_terms: number | null
+          document: string | null
+          email: string | null
+          id: string
+          name: string
+          neighborhood: string | null
+          notes: string | null
+          number: string | null
+          person_type: string | null
+          phone: string | null
+          state: string | null
+          state_registration: string | null
+          street: string | null
+          trade_name: string | null
+          type: string
+          updated_at: string
+          website: string | null
+          whatsapp: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          active?: boolean
+          city?: string | null
+          company_id: string
+          complement?: string | null
+          created_at?: string
+          credit_limit?: number | null
+          default_payment_terms?: number | null
+          document?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          neighborhood?: string | null
+          notes?: string | null
+          number?: string | null
+          person_type?: string | null
+          phone?: string | null
+          state?: string | null
+          state_registration?: string | null
+          street?: string | null
+          trade_name?: string | null
+          type?: string
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          active?: boolean
+          city?: string | null
+          company_id?: string
+          complement?: string | null
+          created_at?: string
+          credit_limit?: number | null
+          default_payment_terms?: number | null
+          document?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          neighborhood?: string | null
+          notes?: string | null
+          number?: string | null
+          person_type?: string | null
+          phone?: string | null
+          state?: string | null
+          state_registration?: string | null
+          street?: string | null
+          trade_name?: string | null
+          type?: string
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+          zip_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contacts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cost_centers: {
+        Row: {
+          active: boolean
+          category: string | null
+          company_id: string
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          category?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          category?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cost_centers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       platform_settings: {
         Row: {
           cadastro_aberto: boolean
@@ -174,6 +417,7 @@ export type Database = {
     }
     Functions: {
       cadastro_esta_aberto: { Args: never; Returns: boolean }
+      can_write_company: { Args: { _company_id: string }; Returns: boolean }
       consagrar_dono_se_primeiro: { Args: never; Returns: boolean }
       create_company_for_user: {
         Args: { company_cnpj?: string; company_name: string }
