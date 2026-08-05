@@ -14,6 +14,212 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_actions: {
+        Row: {
+          action_type: string
+          agent: string
+          amount: number | null
+          company_id: string
+          contact_name: string | null
+          contact_whatsapp: string | null
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          dedupe_key: string | null
+          description: string | null
+          due_date: string | null
+          executed_at: string | null
+          id: string
+          payload: Json
+          status: string
+          suggested_message: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          action_type: string
+          agent: string
+          amount?: number | null
+          company_id: string
+          contact_name?: string | null
+          contact_whatsapp?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          dedupe_key?: string | null
+          description?: string | null
+          due_date?: string | null
+          executed_at?: string | null
+          id?: string
+          payload?: Json
+          status?: string
+          suggested_message?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          action_type?: string
+          agent?: string
+          amount?: number | null
+          company_id?: string
+          contact_name?: string | null
+          contact_whatsapp?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          dedupe_key?: string | null
+          description?: string | null
+          due_date?: string | null
+          executed_at?: string | null
+          id?: string
+          payload?: Json
+          status?: string
+          suggested_message?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_actions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_instances: {
+        Row: {
+          ativo: boolean
+          canais: Json
+          company_id: string
+          config: Json
+          created_at: string
+          id: string
+          last_result: Json | null
+          last_run_at: string | null
+          nome: string
+          template_key: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          canais?: Json
+          company_id: string
+          config?: Json
+          created_at?: string
+          id?: string
+          last_result?: Json | null
+          last_run_at?: string | null
+          nome: string
+          template_key: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          canais?: Json
+          company_id?: string
+          config?: Json
+          created_at?: string
+          id?: string
+          last_result?: Json | null
+          last_run_at?: string | null
+          nome?: string
+          template_key?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_instances_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_rules: {
+        Row: {
+          agent: string
+          ativo: boolean
+          company_id: string
+          config: Json
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          agent: string
+          ativo?: boolean
+          company_id: string
+          config?: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          agent?: string
+          ativo?: boolean
+          company_id?: string
+          config?: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_usage: {
+        Row: {
+          company_id: string | null
+          completion_tokens: number
+          created_at: string
+          custo_centavos: number
+          funcao: string
+          id: string
+          modelo: string | null
+          prompt_tokens: number
+          sucesso: boolean
+        }
+        Insert: {
+          company_id?: string | null
+          completion_tokens?: number
+          created_at?: string
+          custo_centavos?: number
+          funcao: string
+          id?: string
+          modelo?: string | null
+          prompt_tokens?: number
+          sucesso?: boolean
+        }
+        Update: {
+          company_id?: string | null
+          completion_tokens?: number
+          created_at?: string
+          custo_centavos?: number
+          funcao?: string
+          id?: string
+          modelo?: string | null
+          prompt_tokens?: number
+          sucesso?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_usage_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bank_accounts: {
         Row: {
           account_number: string | null
@@ -285,6 +491,61 @@ export type Database = {
             columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classification_rules: {
+        Row: {
+          account_id: string | null
+          acertos: number
+          company_id: string
+          cost_center_id: string | null
+          created_at: string
+          id: string
+          padrao: string
+          updated_at: string
+        }
+        Insert: {
+          account_id?: string | null
+          acertos?: number
+          company_id: string
+          cost_center_id?: string | null
+          created_at?: string
+          id?: string
+          padrao: string
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string | null
+          acertos?: number
+          company_id?: string
+          cost_center_id?: string | null
+          created_at?: string
+          id?: string
+          padrao?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "classification_rules_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classification_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classification_rules_cost_center_id_fkey"
+            columns: ["cost_center_id"]
+            isOneToOne: false
+            referencedRelation: "cost_centers"
             referencedColumns: ["id"]
           },
         ]
@@ -966,6 +1227,60 @@ export type Database = {
             foreignKeyName: "nfse_config_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          agent_instance_id: string | null
+          categoria: string
+          company_id: string
+          corpo: string | null
+          created_at: string
+          dedupe_key: string | null
+          id: string
+          lida: boolean
+          link: string | null
+          titulo: string
+        }
+        Insert: {
+          agent_instance_id?: string | null
+          categoria?: string
+          company_id: string
+          corpo?: string | null
+          created_at?: string
+          dedupe_key?: string | null
+          id?: string
+          lida?: boolean
+          link?: string | null
+          titulo: string
+        }
+        Update: {
+          agent_instance_id?: string | null
+          categoria?: string
+          company_id?: string
+          corpo?: string | null
+          created_at?: string
+          dedupe_key?: string | null
+          id?: string
+          lida?: boolean
+          link?: string | null
+          titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_agent_instance_id_fkey"
+            columns: ["agent_instance_id"]
+            isOneToOne: false
+            referencedRelation: "agent_instances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
