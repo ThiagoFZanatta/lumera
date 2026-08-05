@@ -253,7 +253,7 @@ Resultado l\xEDquido: ${fmt(net)}
 });
 
 // src/lib/mcp/index.ts
-var projectRef = "ccrucecqmgfofbbwlpya";
+var projectRef = "canwvqgovjmejwiaxxfy";
 var mcp_default = defineMcp({
   name: "financeai-mcp",
   title: "FinanceAI",
