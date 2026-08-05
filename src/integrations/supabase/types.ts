@@ -276,6 +276,138 @@ export type Database = {
           },
         ]
       }
+      bank_connections: {
+        Row: {
+          company_id: string
+          consent_expires_at: string | null
+          created_at: string
+          external_id: string
+          id: string
+          institution_image: string | null
+          institution_name: string | null
+          last_synced_at: string | null
+          provider: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          consent_expires_at?: string | null
+          created_at?: string
+          external_id: string
+          id?: string
+          institution_image?: string | null
+          institution_name?: string | null
+          last_synced_at?: string | null
+          provider?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          consent_expires_at?: string | null
+          created_at?: string
+          external_id?: string
+          id?: string
+          institution_image?: string | null
+          institution_name?: string | null
+          last_synced_at?: string | null
+          provider?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_connections_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bank_transactions_raw: {
+        Row: {
+          account_external_id: string | null
+          amount: number
+          category: string | null
+          company_id: string
+          connection_id: string | null
+          created_at: string
+          date: string
+          description: string
+          direction: string
+          external_id: string
+          id: string
+          payment_method: string | null
+          provider: string
+          raw: Json | null
+          status: string
+          transaction_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_external_id?: string | null
+          amount?: number
+          category?: string | null
+          company_id: string
+          connection_id?: string | null
+          created_at?: string
+          date: string
+          description?: string
+          direction?: string
+          external_id: string
+          id?: string
+          payment_method?: string | null
+          provider?: string
+          raw?: Json | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_external_id?: string | null
+          amount?: number
+          category?: string | null
+          company_id?: string
+          connection_id?: string | null
+          created_at?: string
+          date?: string
+          description?: string
+          direction?: string
+          external_id?: string
+          id?: string
+          payment_method?: string | null
+          provider?: string
+          raw?: Json | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_transactions_raw_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_raw_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "bank_connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_raw_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bills_payable: {
         Row: {
           approval_status: string
@@ -1254,6 +1386,47 @@ export type Database = {
           },
         ]
       }
+      contaazul_config: {
+        Row: {
+          ativo: boolean
+          client_id_preview: string | null
+          company_id: string
+          created_at: string
+          id: string
+          last_import_at: string | null
+          last_import_result: Json | null
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          client_id_preview?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          last_import_at?: string | null
+          last_import_result?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          client_id_preview?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          last_import_at?: string | null
+          last_import_result?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contaazul_config_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contacts: {
         Row: {
           active: boolean
@@ -1576,6 +1749,81 @@ export type Database = {
           },
         ]
       }
+      inter_config: {
+        Row: {
+          account_number: string | null
+          active: boolean
+          bank_account_id: string | null
+          cert_pem: string | null
+          client_id: string | null
+          client_secret: string | null
+          company_id: string
+          created_at: string
+          environment: string
+          id: string
+          key_pem: string | null
+          last_balance: number | null
+          last_balance_at: string | null
+          last_sync_at: string | null
+          last_test_at: string | null
+          last_test_status: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_number?: string | null
+          active?: boolean
+          bank_account_id?: string | null
+          cert_pem?: string | null
+          client_id?: string | null
+          client_secret?: string | null
+          company_id: string
+          created_at?: string
+          environment?: string
+          id?: string
+          key_pem?: string | null
+          last_balance?: number | null
+          last_balance_at?: string | null
+          last_sync_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_number?: string | null
+          active?: boolean
+          bank_account_id?: string | null
+          cert_pem?: string | null
+          client_id?: string | null
+          client_secret?: string | null
+          company_id?: string
+          created_at?: string
+          environment?: string
+          id?: string
+          key_pem?: string | null
+          last_balance?: number | null
+          last_balance_at?: string | null
+          last_sync_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inter_config_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inter_config_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoices: {
         Row: {
           access_key: string | null
@@ -1859,6 +2107,56 @@ export type Database = {
           },
           {
             foreignKeyName: "notifications_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      openfinance_config: {
+        Row: {
+          active: boolean
+          client_id_preview: string | null
+          company_id: string
+          created_at: string
+          id: string
+          last_sync_at: string | null
+          last_test_at: string | null
+          last_test_status: string | null
+          provider: string
+          sandbox: boolean
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          client_id_preview?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          last_sync_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          provider?: string
+          sandbox?: boolean
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          client_id_preview?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          last_sync_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          provider?: string
+          sandbox?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "openfinance_config_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -3165,6 +3463,135 @@ export type Database = {
           },
         ]
       }
+      whatsapp_configs: {
+        Row: {
+          active: boolean
+          company_id: string
+          created_at: string
+          evolution_api_key: string | null
+          evolution_api_url: string | null
+          group_jid: string | null
+          group_name: string | null
+          id: string
+          instance_name: string
+          notify_number: string | null
+          phone_number: string | null
+          updated_at: string
+          webhook_secret: string | null
+        }
+        Insert: {
+          active?: boolean
+          company_id: string
+          created_at?: string
+          evolution_api_key?: string | null
+          evolution_api_url?: string | null
+          group_jid?: string | null
+          group_name?: string | null
+          id?: string
+          instance_name: string
+          notify_number?: string | null
+          phone_number?: string | null
+          updated_at?: string
+          webhook_secret?: string | null
+        }
+        Update: {
+          active?: boolean
+          company_id?: string
+          created_at?: string
+          evolution_api_key?: string | null
+          evolution_api_url?: string | null
+          group_jid?: string | null
+          group_name?: string | null
+          id?: string
+          instance_name?: string
+          notify_number?: string | null
+          phone_number?: string | null
+          updated_at?: string
+          webhook_secret?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_configs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      whatsapp_messages: {
+        Row: {
+          classification: Json | null
+          company_id: string
+          config_id: string | null
+          created_at: string
+          direction: string
+          error_message: string | null
+          id: string
+          media_url: string | null
+          message_id: string | null
+          message_text: string | null
+          message_type: string
+          phone_number: string | null
+          processed: boolean
+          transaction_id: string | null
+        }
+        Insert: {
+          classification?: Json | null
+          company_id: string
+          config_id?: string | null
+          created_at?: string
+          direction?: string
+          error_message?: string | null
+          id?: string
+          media_url?: string | null
+          message_id?: string | null
+          message_text?: string | null
+          message_type?: string
+          phone_number?: string | null
+          processed?: boolean
+          transaction_id?: string | null
+        }
+        Update: {
+          classification?: Json | null
+          company_id?: string
+          config_id?: string | null
+          created_at?: string
+          direction?: string
+          error_message?: string | null
+          id?: string
+          media_url?: string | null
+          message_id?: string | null
+          message_text?: string | null
+          message_type?: string
+          phone_number?: string | null
+          processed?: boolean
+          transaction_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_messages_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "whatsapp_messages_config_id_fkey"
+            columns: ["config_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_configs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "whatsapp_messages_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -3182,6 +3609,11 @@ export type Database = {
         Args: { p_company_id: string; p_mes: string }
         Returns: Json
       }
+      get_contaazul_credentials: {
+        Args: { p_company_id: string }
+        Returns: Json
+      }
+      get_pluggy_credentials: { Args: { p_company_id: string }; Returns: Json }
       get_stripe_credentials: { Args: { p_config_id: string }; Returns: Json }
       is_company_admin: { Args: { _company_id: string }; Returns: boolean }
       is_company_member: { Args: { _company_id: string }; Returns: boolean }
@@ -3200,8 +3632,29 @@ export type Database = {
         Args: { p_company_id: string }
         Returns: string
       }
+      rotate_contaazul_refresh_token: {
+        Args: { p_company_id: string; p_refresh_token: string }
+        Returns: undefined
+      }
+      set_contaazul_credentials: {
+        Args: {
+          p_client_id: string
+          p_client_secret: string
+          p_company_id: string
+          p_refresh_token: string
+        }
+        Returns: undefined
+      }
       set_focus_token: {
         Args: { p_company_id: string; p_environment: string; p_token: string }
+        Returns: undefined
+      }
+      set_pluggy_credentials: {
+        Args: {
+          p_client_id: string
+          p_client_secret: string
+          p_company_id: string
+        }
         Returns: undefined
       }
       set_stripe_credentials: {
