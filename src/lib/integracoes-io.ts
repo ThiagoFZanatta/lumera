@@ -299,8 +299,9 @@ export async function carregarConfiguradas(companyId: string): Promise<string[]>
       return !!data;
     }],
     ["plugnotas", async () => {
-      const { data } = await supabase.from("plugnotas_config").select("api_key")
-        .eq("company_id", companyId).not("api_key", "is", null).maybeSingle();
+      // A api_key não é legível pelo app (grant por coluna); a tela vê só o indicador.
+      const { data } = await supabase.from("plugnotas_config").select("api_key_set")
+        .eq("company_id", companyId).eq("api_key_set", true).maybeSingle();
       return !!data;
     }],
     ["focus", async () => {
@@ -309,8 +310,9 @@ export async function carregarConfiguradas(companyId: string): Promise<string[]>
       return !!(data?.token_homologacao_preview || data?.token_producao_preview);
     }],
     ["nfse", async () => {
-      const { data } = await supabase.from("nfse_config").select("cert_pfx_base64")
-        .eq("company_id", companyId).not("cert_pfx_base64", "is", null).maybeSingle();
+      // O certificado e a senha ficam ilegíveis para o app; só o indicador vem.
+      const { data } = await supabase.from("nfse_config").select("cert_set")
+        .eq("company_id", companyId).eq("cert_set", true).maybeSingle();
       return !!data;
     }],
   ];
