@@ -205,6 +205,33 @@ export type Database = {
           },
         ]
       }
+      cclasstrib_codigos: {
+        Row: {
+          ativo: boolean
+          codigo: string
+          created_at: string
+          descricao: string
+          tributo: string | null
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          codigo: string
+          created_at?: string
+          descricao: string
+          tributo?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          codigo?: string
+          created_at?: string
+          descricao?: string
+          tributo?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       chart_of_accounts: {
         Row: {
           active: boolean
@@ -608,6 +635,342 @@ export type Database = {
           },
         ]
       }
+      fiscal_files: {
+        Row: {
+          company_id: string
+          created_at: string
+          file_size: string | null
+          file_url: string | null
+          id: string
+          nome: string
+          source: string
+          tipo: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          file_size?: string | null
+          file_url?: string | null
+          id?: string
+          nome: string
+          source?: string
+          tipo: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          file_size?: string | null
+          file_url?: string | null
+          id?: string
+          nome?: string
+          source?: string
+          tipo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fiscal_files_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      focus_config: {
+        Row: {
+          active: boolean
+          company_id: string
+          created_at: string
+          environment: string
+          id: string
+          last_emission_at: string | null
+          last_test_at: string | null
+          last_test_status: string | null
+          token_homologacao: string | null
+          token_homologacao_preview: string | null
+          token_producao: string | null
+          token_producao_preview: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          company_id: string
+          created_at?: string
+          environment?: string
+          id?: string
+          last_emission_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          token_homologacao?: string | null
+          token_homologacao_preview?: string | null
+          token_producao?: string | null
+          token_producao_preview?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          company_id?: string
+          created_at?: string
+          environment?: string
+          id?: string
+          last_emission_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          token_homologacao?: string | null
+          token_homologacao_preview?: string | null
+          token_producao?: string | null
+          token_producao_preview?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "focus_config_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          access_key: string | null
+          cancelled_at: string | null
+          cbs_valor: number | null
+          cclasstrib: string | null
+          company_id: string
+          contact_id: string | null
+          created_at: string
+          ibs_valor: number | null
+          id: string
+          issue_date: string
+          notes: string | null
+          number: string | null
+          pdf_url: string | null
+          sales_order_id: string | null
+          series: string | null
+          status: string
+          total: number
+          type: string
+          updated_at: string
+          xml_content: string | null
+        }
+        Insert: {
+          access_key?: string | null
+          cancelled_at?: string | null
+          cbs_valor?: number | null
+          cclasstrib?: string | null
+          company_id: string
+          contact_id?: string | null
+          created_at?: string
+          ibs_valor?: number | null
+          id?: string
+          issue_date?: string
+          notes?: string | null
+          number?: string | null
+          pdf_url?: string | null
+          sales_order_id?: string | null
+          series?: string | null
+          status?: string
+          total?: number
+          type?: string
+          updated_at?: string
+          xml_content?: string | null
+        }
+        Update: {
+          access_key?: string | null
+          cancelled_at?: string | null
+          cbs_valor?: number | null
+          cclasstrib?: string | null
+          company_id?: string
+          contact_id?: string | null
+          created_at?: string
+          ibs_valor?: number | null
+          id?: string
+          issue_date?: string
+          notes?: string | null
+          number?: string | null
+          pdf_url?: string | null
+          sales_order_id?: string | null
+          series?: string | null
+          status?: string
+          total?: number
+          type?: string
+          updated_at?: string
+          xml_content?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_sales_order_id_fkey"
+            columns: ["sales_order_id"]
+            isOneToOne: false
+            referencedRelation: "sales_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      monthly_close: {
+        Row: {
+          closed_at: string | null
+          closed_by: string | null
+          company_id: string
+          created_at: string
+          id: string
+          month: string
+          reopen_reason: string | null
+          reopened_at: string | null
+          reopened_by: string | null
+          snapshot: Json | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          closed_at?: string | null
+          closed_by?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          month: string
+          reopen_reason?: string | null
+          reopened_at?: string | null
+          reopened_by?: string | null
+          snapshot?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          closed_at?: string | null
+          closed_by?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          month?: string
+          reopen_reason?: string | null
+          reopened_at?: string | null
+          reopened_by?: string | null
+          snapshot?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "monthly_close_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      municipalities: {
+        Row: {
+          code_ibge: string
+          created_at: string
+          name: string
+          region: string | null
+          uf: string | null
+          updated_at: string
+        }
+        Insert: {
+          code_ibge: string
+          created_at?: string
+          name: string
+          region?: string | null
+          uf?: string | null
+          updated_at?: string
+        }
+        Update: {
+          code_ibge?: string
+          created_at?: string
+          name?: string
+          region?: string | null
+          uf?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      nfse_config: {
+        Row: {
+          active: boolean
+          ambiente: string
+          cert_password: string | null
+          cert_pfx_base64: string | null
+          cert_set: boolean | null
+          codigo_municipio: string | null
+          company_id: string
+          created_at: string
+          id: string
+          inscricao_municipal: string | null
+          last_emission_at: string | null
+          last_test_at: string | null
+          last_test_status: string | null
+          proximo_numero_dps: number
+          serie_dps: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          ambiente?: string
+          cert_password?: string | null
+          cert_pfx_base64?: string | null
+          cert_set?: boolean | null
+          codigo_municipio?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          inscricao_municipal?: string | null
+          last_emission_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          proximo_numero_dps?: number
+          serie_dps?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          ambiente?: string
+          cert_password?: string | null
+          cert_pfx_base64?: string | null
+          cert_set?: boolean | null
+          codigo_municipio?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          inscricao_municipal?: string | null
+          last_emission_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          proximo_numero_dps?: number
+          serie_dps?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nfse_config_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       platform_settings: {
         Row: {
           cadastro_aberto: boolean
@@ -637,6 +1000,167 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      plugnotas_config: {
+        Row: {
+          active: boolean
+          api_key: string | null
+          api_key_set: boolean | null
+          company_id: string
+          created_at: string
+          enabled_cte: boolean
+          enabled_mdfe: boolean
+          enabled_nfce: boolean
+          enabled_nfe: boolean
+          enabled_nfse: boolean
+          environment: string
+          id: string
+          last_emission_at: string | null
+          last_test_at: string | null
+          last_test_status: string | null
+          plugnotas_empresa_cnpj: string | null
+          plugnotas_empresa_id: string | null
+          serie_padrao: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          api_key?: string | null
+          api_key_set?: boolean | null
+          company_id: string
+          created_at?: string
+          enabled_cte?: boolean
+          enabled_mdfe?: boolean
+          enabled_nfce?: boolean
+          enabled_nfe?: boolean
+          enabled_nfse?: boolean
+          environment?: string
+          id?: string
+          last_emission_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          plugnotas_empresa_cnpj?: string | null
+          plugnotas_empresa_id?: string | null
+          serie_padrao?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          api_key?: string | null
+          api_key_set?: boolean | null
+          company_id?: string
+          created_at?: string
+          enabled_cte?: boolean
+          enabled_mdfe?: boolean
+          enabled_nfce?: boolean
+          enabled_nfe?: boolean
+          enabled_nfse?: boolean
+          environment?: string
+          id?: string
+          last_emission_at?: string | null
+          last_test_at?: string | null
+          last_test_status?: string | null
+          plugnotas_empresa_cnpj?: string | null
+          plugnotas_empresa_id?: string | null
+          serie_padrao?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugnotas_config_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plugnotas_documents: {
+        Row: {
+          cancelled_at: string | null
+          cbs_aliquota: number | null
+          cbs_valor: number | null
+          cclasstrib: string | null
+          chave_acesso: string | null
+          company_id: string
+          created_at: string
+          doc_type: string
+          emitted_at: string | null
+          ibs_aliquota: number | null
+          ibs_valor: number | null
+          id: string
+          invoice_id: string | null
+          numero: string | null
+          payload_request: Json | null
+          payload_response: Json | null
+          plugnotas_id: string | null
+          serie: string | null
+          status: string
+          status_message: string | null
+          updated_at: string
+        }
+        Insert: {
+          cancelled_at?: string | null
+          cbs_aliquota?: number | null
+          cbs_valor?: number | null
+          cclasstrib?: string | null
+          chave_acesso?: string | null
+          company_id: string
+          created_at?: string
+          doc_type: string
+          emitted_at?: string | null
+          ibs_aliquota?: number | null
+          ibs_valor?: number | null
+          id?: string
+          invoice_id?: string | null
+          numero?: string | null
+          payload_request?: Json | null
+          payload_response?: Json | null
+          plugnotas_id?: string | null
+          serie?: string | null
+          status: string
+          status_message?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cancelled_at?: string | null
+          cbs_aliquota?: number | null
+          cbs_valor?: number | null
+          cclasstrib?: string | null
+          chave_acesso?: string | null
+          company_id?: string
+          created_at?: string
+          doc_type?: string
+          emitted_at?: string | null
+          ibs_aliquota?: number | null
+          ibs_valor?: number | null
+          id?: string
+          invoice_id?: string | null
+          numero?: string | null
+          payload_request?: Json | null
+          payload_response?: Json | null
+          plugnotas_id?: string | null
+          serie?: string | null
+          status?: string
+          status_message?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugnotas_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plugnotas_documents_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
@@ -1159,6 +1683,111 @@ export type Database = {
           },
         ]
       }
+      tax_guides: {
+        Row: {
+          company_id: string
+          competencia: string
+          created_at: string
+          id: string
+          invoice_id: string | null
+          source: string
+          status: string
+          tipo: string
+          updated_at: string
+          valor: number
+          vencimento: string
+        }
+        Insert: {
+          company_id: string
+          competencia: string
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          source?: string
+          status?: string
+          tipo: string
+          updated_at?: string
+          valor?: number
+          vencimento: string
+        }
+        Update: {
+          company_id?: string
+          competencia?: string
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          source?: string
+          status?: string
+          tipo?: string
+          updated_at?: string
+          valor?: number
+          vencimento?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tax_guides_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_guides_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tax_rates: {
+        Row: {
+          confidence: string | null
+          created_at: string
+          ente_code: string
+          id: string
+          item_code: string | null
+          notes: string | null
+          rate: number
+          source: string | null
+          tax: string
+          updated_at: string
+          version: string | null
+          vigencia_fim: string | null
+          vigencia_inicio: string | null
+        }
+        Insert: {
+          confidence?: string | null
+          created_at?: string
+          ente_code: string
+          id?: string
+          item_code?: string | null
+          notes?: string | null
+          rate: number
+          source?: string | null
+          tax: string
+          updated_at?: string
+          version?: string | null
+          vigencia_fim?: string | null
+          vigencia_inicio?: string | null
+        }
+        Update: {
+          confidence?: string | null
+          created_at?: string
+          ente_code?: string
+          id?: string
+          item_code?: string | null
+          notes?: string | null
+          rate?: number
+          source?: string | null
+          tax?: string
+          updated_at?: string
+          version?: string | null
+          vigencia_fim?: string | null
+          vigencia_inicio?: string | null
+        }
+        Relationships: []
+      }
       transaction_allocations: {
         Row: {
           cost_center_id: string
@@ -1363,13 +1992,25 @@ export type Database = {
         Returns: string
       }
       demonstracao_disponivel: { Args: never; Returns: boolean }
+      fechar_mes: {
+        Args: { p_company_id: string; p_mes: string }
+        Returns: Json
+      }
       is_company_admin: { Args: { _company_id: string }; Returns: boolean }
       is_company_member: { Args: { _company_id: string }; Returns: boolean }
       limpar_demonstracao_se_remixado: { Args: never; Returns: undefined }
       plano_da_empresa: { Args: { p_company_id: string }; Returns: Json }
       plataforma_bloqueada: { Args: never; Returns: boolean }
+      reabrir_mes: {
+        Args: { p_company_id: string; p_mes: string; p_motivo: string }
+        Returns: undefined
+      }
       registrar_ambiente: {
         Args: { p_functions_url: string }
+        Returns: undefined
+      }
+      set_focus_token: {
+        Args: { p_company_id: string; p_environment: string; p_token: string }
         Returns: undefined
       }
       sou_dono_da_plataforma: { Args: never; Returns: boolean }
