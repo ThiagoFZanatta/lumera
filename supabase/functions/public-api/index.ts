@@ -15,6 +15,7 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.97.0";
 import { getCorsHeaders, corsPreflightResponse } from "../_shared/cors.ts";
+import { chaveDeLimite, estourouLimite, respostaLimiteExcedido } from "../_shared/rate-limit.ts";
 
 const MAX_LIMIT = 500;
 
@@ -35,6 +36,10 @@ Deno.serve(async (req) => {
   const cors = getCorsHeaders(req, "x-api-key");
   const preflight = corsPreflightResponse(req);
   if (preflight) return preflight;
+
+  if (estourouLimite(chaveDeLimite(req), 60, 60_000)) {
+    return respostaLimiteExcedido(cors);
+  }
 
   if (req.method !== "GET") {
     return json({ success: false, data: null, error: "Somente GET na v1" }, 405, cors);

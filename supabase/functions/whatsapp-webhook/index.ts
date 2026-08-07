@@ -1,10 +1,15 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.97.0";
 import { getCorsHeaders, corsPreflightResponse } from "../_shared/cors.ts";
+import { chaveDeLimite, estourouLimite, respostaLimiteExcedido } from "../_shared/rate-limit.ts";
 
 Deno.serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   const preflight = corsPreflightResponse(req);
   if (preflight) return preflight;
+
+  if (estourouLimite(chaveDeLimite(req), 60, 60_000)) {
+    return respostaLimiteExcedido(corsHeaders);
+  }
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;

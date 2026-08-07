@@ -25,11 +25,16 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.97.0";
 import { getCorsHeaders, corsPreflightResponse } from "../_shared/cors.ts";
 import { assinaturaStripeConfere } from "../_shared/stripe-reconcile.ts";
 import { stripeGet, reconheceCobranca, componhoRepasse } from "../_shared/stripe-sync.ts";
+import { chaveDeLimite, estourouLimite, respostaLimiteExcedido } from "../_shared/rate-limit.ts";
 
 Deno.serve(async (req) => {
   const corsHeaders = getCorsHeaders(req, "stripe-signature");
   const preflight = corsPreflightResponse(req, "stripe-signature");
   if (preflight) return preflight;
+
+  if (estourouLimite(chaveDeLimite(req), 60, 60_000)) {
+    return respostaLimiteExcedido(corsHeaders);
+  }
 
   const responde = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {

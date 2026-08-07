@@ -75,7 +75,13 @@ Deno.serve(async (req) => {
         }
         throw e;
       }
-      const webhookUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/openfinance-webhook`;
+      // BLOCO 8: segredo próprio na URL, já que a assinatura nativa do Pluggy
+      // não está documentada com confiança suficiente para eu implementá-la
+      // corretamente. Mesmo padrão usado em webhook-receiver/whatsapp-webhook.
+      const webhookSecret = Deno.env.get("PLUGGY_WEBHOOK_SECRET");
+      const webhookUrl = webhookSecret
+        ? `${Deno.env.get("SUPABASE_URL")}/functions/v1/openfinance-webhook?token=${encodeURIComponent(webhookSecret)}`
+        : `${Deno.env.get("SUPABASE_URL")}/functions/v1/openfinance-webhook`;
       const accessToken = await createConnectToken(apiKey, {
         clientUserId: companyId,
         webhookUrl,

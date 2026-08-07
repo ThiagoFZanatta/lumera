@@ -9,11 +9,29 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.97.0";
 import { getCorsHeaders, corsPreflightResponse } from "../_shared/cors.ts";
 import { syncPluggyConnection } from "../_shared/openfinance-sync.ts";
+import { chaveDeLimite, estourouLimite, respostaLimiteExcedido } from "../_shared/rate-limit.ts";
 
 Deno.serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   const preflight = corsPreflightResponse(req);
   if (preflight) return preflight;
+
+  if (estourouLimite(chaveDeLimite(req), 30, 60_000)) {
+    return respostaLimiteExcedido(corsHeaders);
+  }
+
+  // BLOCO 8: sem verificação nativa do Pluggy documentada com confiança,
+  // exigimos o segredo próprio que colocamos na URL ao registrar o webhook
+  // (ver openfinance-connect). Sem ele, qualquer um poderia simular um evento
+  // sabendo só o itemId, que não é secreto.
+  const webhookSecret = Deno.env.get("PLUGGY_WEBHOOK_SECRET");
+  const providedToken = new URL(req.url).searchParams.get("token");
+  if (!webhookSecret || providedToken !== webhookSecret) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   const service = createClient(
     Deno.env.get("SUPABASE_URL")!,

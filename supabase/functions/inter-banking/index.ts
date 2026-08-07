@@ -14,11 +14,7 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.97.0";
-
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { getCorsHeaders } from "../_shared/cors.ts";
 
 const INTER_PROD_HOST    = "cdpj.partners.bancointer.com.br";
 const INTER_SANDBOX_HOST = "cdpj-sandbox.partners.uatinter.co";
@@ -252,6 +248,13 @@ async function fetchStatement(
 // ---------- Main handler ----------
 
 Deno.serve(async (req) => {
+  const CORS = getCorsHeaders(req);
+  function jsonResp(data: unknown, status = 200) {
+    return new Response(JSON.stringify(data), {
+      status,
+      headers: { ...CORS, "Content-Type": "application/json" },
+    });
+  }
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
 
   try {
@@ -396,10 +399,3 @@ Deno.serve(async (req) => {
     return jsonResp({ error: message }, 500);
   }
 });
-
-function jsonResp(data: unknown, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { ...CORS, "Content-Type": "application/json" },
-  });
-}
