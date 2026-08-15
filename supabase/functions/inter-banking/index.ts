@@ -76,6 +76,20 @@ function normalizePem(raw: string, type: "CERTIFICATE" | "PRIVATE KEY"): string 
 
 // ---------- Raw HTTPS over Deno.connectTls (mTLS) ----------
 
+const CRLF = [13, 10];
+const CRLFCRLF = [13, 10, 13, 10];
+
+/** Encontra a primeira ocorrência de uma sequência de bytes dentro de outra. */
+function indexOfBytes(haystack: Uint8Array, needle: number[], start = 0): number {
+  outer: for (let i = start; i <= haystack.length - needle.length; i++) {
+    for (let j = 0; j < needle.length; j++) {
+      if (haystack[i + j] !== needle[j]) continue outer;
+    }
+    return i;
+  }
+  return -1;
+}
+
 /**
  * Faz uma requisição HTTPS com certificado cliente via Deno.connectTls.
  * API estável — funciona em Deno Deploy sem flags adicionais.
@@ -127,14 +141,17 @@ async function tlsRequest(
     let off = 0;
     for (const p of parts) { full.set(p, off); off += p.length; }
 
-    const raw = new TextDecoder().decode(full);
+    // Divide cabeçalhos e corpo em nível de BYTES. Cabeçalhos HTTP são
+    // sempre ASCII, então decodificá-los isoladamente é seguro; o corpo é
+    // mantido como bytes até o fim para não desalinhar o decode chunked
+    // abaixo (tamanho de chunk é em bytes, não em caracteres).
+    const sep = indexOfBytes(full, CRLFCRLF);
+    if (sep === -1) {
+      throw new Error(`Resposta HTTP inválida: ${new TextDecoder().decode(full).slice(0, 200)}`);
+    }
 
-    // Divide cabeçalhos e corpo
-    const sep = raw.indexOf("\r\n\r\n");
-    if (sep === -1) throw new Error(`Resposta HTTP inválida: ${raw.slice(0, 200)}`);
-
-    const respHeaders = raw.slice(0, sep);
-    let respBody   = raw.slice(sep + 4);
+    const respHeaders = new TextDecoder().decode(full.slice(0, sep));
+    let bodyBytes = full.slice(sep + 4);
 
     // Status
     const statusMatch = respHeaders.match(/^HTTP\/[\d.]+\s+(\d+)/);
@@ -142,28 +159,47 @@ async function tlsRequest(
 
     // Decodifica chunked transfer encoding se necessário
     if (/Transfer-Encoding:\s*chunked/i.test(respHeaders)) {
-      respBody = decodeChunked(respBody);
+      bodyBytes = decodeChunkedBytes(bodyBytes);
     }
 
-    return { status, data: respBody.trim() };
+    // Decodifica pra string uma única vez, no final, com o corpo já
+    // remontado corretamente — evita corromper caracteres multibyte
+    // (acentos) que caiam em fronteiras de chunk.
+    const data = new TextDecoder().decode(bodyBytes).trim();
+
+    return { status, data };
   } finally {
     try { conn.close(); } catch { /* ignore */ }
   }
 }
 
-/** Decodifica HTTP chunked transfer encoding */
-function decodeChunked(encoded: string): string {
-  let result = "";
+/**
+ * Decodifica HTTP chunked transfer encoding operando em bytes.
+ *
+ * Antes isso era feito sobre a string já decodificada em UTF-8, mas o
+ * tamanho de cada chunk vem em bytes — com caracteres multibyte (acentos
+ * em descrições de transações, comuns no extrato do Inter) o offset por
+ * caractere desalinhava e corrompia o JSON resultante
+ * ("Unexpected non-whitespace character after JSON at position ...").
+ */
+function decodeChunkedBytes(encoded: Uint8Array): Uint8Array {
+  const segments: Uint8Array[] = [];
   let pos = 0;
   while (pos < encoded.length) {
-    const lineEnd = encoded.indexOf("\r\n", pos);
+    const lineEnd = indexOfBytes(encoded, CRLF, pos);
     if (lineEnd === -1) break;
-    const chunkSize = parseInt(encoded.slice(pos, lineEnd), 16);
+    const sizeHex = new TextDecoder().decode(encoded.slice(pos, lineEnd));
+    const chunkSize = parseInt(sizeHex, 16);
     if (isNaN(chunkSize) || chunkSize === 0) break;
     pos = lineEnd + 2;
-    result += encoded.slice(pos, pos + chunkSize);
-    pos += chunkSize + 2; // pula CRLF após chunk
+    segments.push(encoded.slice(pos, pos + chunkSize));
+    pos += chunkSize + 2; // pula CRLF após o chunk
   }
+
+  const total = segments.reduce((s, p) => s + p.length, 0);
+  const result = new Uint8Array(total);
+  let off = 0;
+  for (const s of segments) { result.set(s, off); off += s.length; }
   return result;
 }
 
