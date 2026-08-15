@@ -16,15 +16,16 @@
  * QUANDO PUBLICAR O PROJETO: adicione o domínio de produção na lista abaixo.
  */
 const ALLOWED_ORIGINS = [
-  // Pré-visualização atual do editor Lovable (projeto ainda não publicado):
+  // Domínio de produção (projeto publicado no Lovable):
+  "https://blank-canvas-creation-9937.lovable.app",
+
+  // Pré-visualização anterior do editor Lovable (mantida por segurança, caso
+  // ainda seja usada por algum ambiente de teste):
   "https://id-preview--12048dc3-5784-4d18-bb43-bb1e35ee8bcb.lovable.app",
 
   // Ambiente local de desenvolvimento (Vite), caso alguém rode o projeto na própria máquina:
   "http://localhost:5173",
   "http://localhost:8080",
-
-  // TODO: quando publicar, adicione aqui o domínio de produção, ex:
-  // "https://app.suaempresa.com.br",
 ];
 
 const BASE_HEADERS: Record<string, string> = {
